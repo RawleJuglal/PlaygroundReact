@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { Link } from 'react-router-dom';
-import { getAuth, GoogleAuthProvider, OAuthProvider, FacebookAuthProvider, GithubAuthProvider, signInWithPopup, signOut} from '@firebase/auth'
+import { getAuth, GoogleAuthProvider, OAuthProvider, FacebookAuthProvider, GithubAuthProvider, TwitterAuthProvider, signInWithPopup, signOut} from '@firebase/auth'
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Google, Facebook, Apple, Twitter, Microsoft, Github, Envelope } from 'react-bootstrap-icons';
 
@@ -11,6 +11,7 @@ const SignIn = ()=> {
     const microsoftProvider = new OAuthProvider('microsoft.com')
     const facebookProvider = new FacebookAuthProvider()
     const githubProvider = new GithubAuthProvider()
+    const twitterProvider = new TwitterAuthProvider()
     
     const handleGoogle = ()=> {
         signInWithPopup(auth, googleProvider)
@@ -36,7 +37,18 @@ const SignIn = ()=> {
     }
 
     const handleTwitter = ()=>{
-        return null;
+        signInWithPopup(auth, twitterProvider)
+        .then((result)=>{
+            const credential = TwitterAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
+            const secret = credential.secret;
+            const authenticated = {credToken: token, user: result.user}
+            localStorage.setItem('currentUser', JSON.stringify(authenticated))
+            setCurrentUser(authenticated)
+        })
+        .catch((error)=>{
+            throw new Error(error)
+        })
     }
 
     const handleGithub = ()=>{

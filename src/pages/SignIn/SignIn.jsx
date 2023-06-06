@@ -78,9 +78,6 @@ const SignIn = ()=> {
                         <ListGroup.Item action onClick={handleFacebook}>
                             <Facebook /> Facebook
                         </ListGroup.Item>
-                        <ListGroup.Item action onClick={handleApple}>
-                            <Apple /> Apple
-                        </ListGroup.Item>
                         <ListGroup.Item action onClick={handleTwitter}>
                             <Twitter /> Twitter
                         </ListGroup.Item>

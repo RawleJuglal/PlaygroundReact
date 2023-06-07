@@ -60,6 +60,7 @@ const SignIn = ()=> {
     const handleFacebook = ()=>{
         signInWithPopup(auth, facebookProvider)
         .then((result)=> {
+            console.log(results)
             const credential = FacebookAuthProvider.credentialFromResult(result);
             const token = credential.accessToken;
             const authenticated = {credToken: token, user: result.user}

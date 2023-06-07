@@ -58,6 +58,7 @@ const SignIn = ()=> {
     }
 
     const handleFacebook = ()=>{
+        console.log('in handlefacebook')
         signInWithPopup(auth, facebookProvider)
         .then((result)=> {
             console.log(result)

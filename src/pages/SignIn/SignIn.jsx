@@ -35,6 +35,7 @@ const SignIn = ()=> {
     const handleFacebook = ()=>{
         signInWithPopup(auth, facebookProvider)
         .then((result) => {
+            console.log(`got to result`)
             const credential = FacebookAuthProvider.credentialFromResult(result);
             const token = credential.accessToken;
             const authenticated = {credToken: token, user: result.user}
@@ -51,6 +52,7 @@ const SignIn = ()=> {
             const credential = FacebookAuthProvider.credentialFromError(error);
 
             // ...
+            console.log(errorMessage)
         });
     }
 

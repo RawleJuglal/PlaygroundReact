@@ -1,15 +1,14 @@
 import React, {useState} from 'react'
 import { Link } from 'react-router-dom';
-import { getAuth, GoogleAuthProvider, OAuthProvider, FacebookAuthProvider, GithubAuthProvider, TwitterAuthProvider, signInWithPopup, signOut} from '@firebase/auth'
+import { getAuth, GoogleAuthProvider, GithubAuthProvider, TwitterAuthProvider,signInWithEmailAndPassword, signInWithPopup, signOut} from '@firebase/auth'
 import ListGroup from 'react-bootstrap/ListGroup';
-import { Google, Facebook, Apple, Twitter, Microsoft, Github, Envelope } from 'react-bootstrap-icons';
+import { Google, Twitter, Github, Envelope } from 'react-bootstrap-icons';
 
 const SignIn = ()=> {
     const auth = getAuth()
     const [currentUser, setCurrentUser] = useState()
+    const [manualSignIn, setManualSignIn] = useState({email:'', password:''})
     const googleProvider = new GoogleAuthProvider()
-    const microsoftProvider = new OAuthProvider('microsoft.com')
-    const facebookProvider = new FacebookAuthProvider()
     const githubProvider = new GithubAuthProvider()
     const twitterProvider = new TwitterAuthProvider()
     
@@ -26,34 +25,6 @@ const SignIn = ()=> {
             throw new Error(error)
         })
 
-    }
-
-    const handleMicrosoft = ()=>{
-        return null;
-    }
-
-    const handleFacebook = ()=>{
-        signInWithPopup(auth, facebookProvider)
-        .then((result) => {
-            console.log(`got to result`)
-            const credential = FacebookAuthProvider.credentialFromResult(result);
-            const token = credential.accessToken;
-            const authenticated = {credToken: token, user: result.user}
-            localStorage.setItem('currentUser', JSON.stringify(authenticated))
-            setCurrentUser(authenticated)
-        })
-        .catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.customData.email;
-            // The AuthCredential type that was used.
-            const credential = FacebookAuthProvider.credentialFromError(error);
-
-            // ...
-            console.log(errorMessage)
-        });
     }
 
     const handleTwitter = ()=>{
@@ -93,6 +64,32 @@ const SignIn = ()=> {
         })
     }
 
+    const handleSubmit = (event)=>{
+        event.preventDefault()
+        signInWithEmailAndPassword(auth, manualSignIn.email, manualSignIn.password)
+        .then((userCredentials)=>{
+            const token = userCredentials.user.accessToken;
+            const authenticated = {credToken: token, user: userCredentials.user}
+            localStorage.setItem('currentUser', JSON.stringify(authenticated))
+            setCurrentUser(authenticated)
+        })
+        .catch(error=>{
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(`${errorCode} - ${errorMessage}`)
+        })
+    }
+
+    const handleManualInputChange = (event)=> {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+        
+        setManualSignIn(prevState => {
+            return { ...prevState, [name]: value}
+        })
+    }
+
     return(
         <>
             <main>
@@ -104,12 +101,6 @@ const SignIn = ()=> {
                         <ListGroup.Item action onClick={handleGoogle}>
                             <Google /> Google
                         </ListGroup.Item>
-                        <ListGroup.Item action onClick={handleMicrosoft}>
-                            <Microsoft /> Microsoft
-                        </ListGroup.Item>
-                        <ListGroup.Item action onClick={handleFacebook}>
-                            <Facebook /> Facebook
-                        </ListGroup.Item>
                         <ListGroup.Item action onClick={handleTwitter}>
                             <Twitter /> Twitter
                         </ListGroup.Item>
@@ -118,6 +109,28 @@ const SignIn = ()=> {
                         </ListGroup.Item>
                     </ListGroup>
                     </div>
+                </section>
+                <section>
+                    <h2>Or use the form below to sign in with email/password</h2>
+                    <form onSubmit={handleSubmit}>
+                        <input 
+                            type="text" 
+                            name="email" 
+                            placeholder='email'  
+                            required
+                            value={manualSignIn.email}
+                            onChange={(event)=>handleManualInputChange(event)}
+                            />
+                        <input 
+                            type="password" 
+                            name="password" 
+                            placholder="password" 
+                            required 
+                            value={manualSignIn.password}
+                            onChange={(event)=> handleManualInputChange(event)}
+                            />
+                        <input type="submit" value="Submit" />
+                    </form>
                 </section>
                 <section>
                     <h2>Current User: {currentUser ? currentUser.user.displayName : 'No One'}</h2>

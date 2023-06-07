@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
 import { Link } from 'react-router-dom';
-import { getAuth, GoogleAuthProvider, GithubAuthProvider, TwitterAuthProvider,signInWithEmailAndPassword, signInWithPopup, signOut} from '@firebase/auth'
+import { getAuth, GoogleAuthProvider, GithubAuthProvider, TwitterAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut} from '@firebase/auth'
 import ListGroup from 'react-bootstrap/ListGroup';
-import { Google, Twitter, Github, Envelope } from 'react-bootstrap-icons';
+import { Google, Twitter, Github, Facebook, Envelope } from 'react-bootstrap-icons';
 
 const SignIn = ()=> {
     const auth = getAuth()
@@ -11,6 +11,7 @@ const SignIn = ()=> {
     const googleProvider = new GoogleAuthProvider()
     const githubProvider = new GithubAuthProvider()
     const twitterProvider = new TwitterAuthProvider()
+    const facebookProvider = new FacebookAuthProvider()
     
     const handleGoogle = ()=> {
         signInWithPopup(auth, googleProvider)
@@ -54,6 +55,20 @@ const SignIn = ()=> {
             .catch(error =>{
                 throw new Error(error)
             })
+    }
+
+    const handleFacebook = ()=>{
+        signInWithPopup(auth, facebookProvider)
+        .then((result)=> {
+            const credential = FacebookAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
+            const authenticated = {credToken: token, user: result.user}
+            localStorage.setItem('currentUser', JSON.stringify(authenticated))
+            setCurrentUser(authenticated)
+        })
+        .catch((error)=> {
+            console.log(`${error.code} - ${error.message}`)
+        })
     }
 
     const handleLogout = ()=>{
@@ -106,6 +121,9 @@ const SignIn = ()=> {
                         </ListGroup.Item>
                         <ListGroup.Item action onClick={handleGithub}>
                             <Github /> Github
+                        </ListGroup.Item>
+                        <ListGroup.Item action onClick={handleFacebook}>
+                            <Facebook /> Facebook
                         </ListGroup.Item>
                     </ListGroup>
                     </div>

@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import { Link } from 'react-router-dom';
 import { getAuth, GoogleAuthProvider, GithubAuthProvider, TwitterAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut} from '@firebase/auth'
 import ListGroup from 'react-bootstrap/ListGroup';
-import { Google, Twitter, Github, Facebook, Envelope } from 'react-bootstrap-icons';
+import { Google, Twitter, Github, Facebook } from 'react-bootstrap-icons';
 
 const SignIn = ()=> {
     const auth = getAuth()

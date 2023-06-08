@@ -7,6 +7,7 @@ const Navbar = ()=> {
         <>
             <nav className='--navbar flex'>
                 <NavLink to='about'>About</NavLink>
+                <NavLink to='todo'>Todo</NavLink>
                 <NavLink to='signIn'>Sign In</NavLink>
             </nav>
         </>

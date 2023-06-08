@@ -6,6 +6,7 @@ import Layout from './components/BasicLayout/Layout'
 import Home from './pages/BasicHome/Home'
 import About from './pages/BasicAbout/About'
 import SignIn from './pages/SignIn/SignIn'
+import {FirebaseCRUD, loader as firebaseCRUDLoader} from './pages/FirebaseCRUD/FirebaseCRUD'
 import FirebaseLogin from './pages/FCC/firebaseLogin'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
@@ -19,6 +20,7 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route index element={<Home />}/>
     <Route path='about' element={<About />}/>
     <Route path='signIn' element={<SignIn />}/>
+    <Route path='todo' element={<FirebaseCRUD />} loader={firebaseCRUDLoader}/>
   </Route>
 ))
 

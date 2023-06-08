@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { collection, getFirestore, getDocs, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore'
 
 const firebaseConfig = {
   apiKey: "AIzaSyArKEiXK2D_LjKr8cP1oIauDLyxD30Kbbo",
@@ -10,5 +11,48 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const database = getFirestore(app)
+const collectionRef = collection(database, 'users')
 
-export {app}
+const getData = async ()=>{
+  const querySnapshot = await getDocs(collectionRef)
+  const dataArr = querySnapshot.docs.map(doc => ({
+    ...doc.data(),
+    id:doc.id
+  }))
+  return dataArr
+}
+
+const addData = (dataObj)=>{
+  addDoc(collectionRef, dataObj)
+.then(()=>{
+    alert('data added')
+})
+.catch((error)=>{
+    throw new Error(error)
+})
+}
+
+const updateData = (collectionID, dataObj)=>{
+  const docToUpdate = doc(database, 'users', collectionID)
+        updateDoc(docToUpdate, dataObj)
+        .then(()=>{
+            alert('Data updated')
+        })
+        .catch(error =>{
+            throw new Error(error)
+        })
+}
+
+const deleteData = (collectionID)=>{
+  const docToUpdate = doc(database, 'users', collectionID)
+  deleteDoc(docToUpdate)
+  .then(()=>{
+    alert('document deleted')
+  })
+  .catch((error)=>{
+    throw new Error(error)
+  })
+}
+
+export {app, database, collectionRef, getData, addData, updateData, deleteData}

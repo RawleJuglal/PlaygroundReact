@@ -1,12 +1,15 @@
 import React, {useState} from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { getAuth, GoogleAuthProvider, GithubAuthProvider, TwitterAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut} from '@firebase/auth'
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Google, Twitter, Github, Facebook } from 'react-bootstrap-icons';
 
 const SignIn = ()=> {
     const auth = getAuth()
-    const [currentUser, setCurrentUser] = useState()
+    const navigate = useNavigate()
+    const {currentUser, handleUpdateCurrentUser} = useOutletContext()
+
+    // const [currentUser, setCurrentUser] = useState()
     const [manualSignIn, setManualSignIn] = useState({email:'', password:''})
     const googleProvider = new GoogleAuthProvider()
     const githubProvider = new GithubAuthProvider()
@@ -20,7 +23,9 @@ const SignIn = ()=> {
             const token = credential.accessToken;
             const authenticated = {credToken: token, user: results.user}
             localStorage.setItem('currentUser', JSON.stringify(authenticated))
-            setCurrentUser(authenticated)
+            console.log(authenticated)
+            handleUpdateCurrentUser(authenticated)
+            navigate('..')
         })
         .catch(error => {
             throw new Error(error)
@@ -36,7 +41,8 @@ const SignIn = ()=> {
             const secret = credential.secret;
             const authenticated = {credToken: token, user: result.user}
             localStorage.setItem('currentUser', JSON.stringify(authenticated))
-            setCurrentUser(authenticated)
+            handleUpdateCurrentUser(authenticated)
+            navigate('..')
         })
         .catch((error)=>{
             throw new Error(error)
@@ -50,7 +56,8 @@ const SignIn = ()=> {
                 const token = credential.accessToken;
                 const authenticated = {credToken: token, user: result.user}
                 localStorage.setItem('currentUser', JSON.stringify(authenticated))
-                setCurrentUser(authenticated)
+                handleUpdateCurrentUser(authenticated)
+                navigate('..')
             })
             .catch(error =>{
                 throw new Error(error)
@@ -65,7 +72,8 @@ const SignIn = ()=> {
             const token = credential.accessToken;
             const authenticated = {credToken: token, user: result.user}
             localStorage.setItem('currentUser', JSON.stringify(authenticated))
-            setCurrentUser(authenticated)
+            handleUpdateCurrentUser(authenticated)
+            navigate('..')
         })
         .catch((error)=> {
             console.log(`${error.code} - ${error.message}`)
@@ -76,7 +84,8 @@ const SignIn = ()=> {
         signOut(auth)
         .then(()=>{
             localStorage.removeItem('currentUser')
-            setCurrentUser(null)
+            handleUpdateCurrentUser(null)
+            navigate('..')
         })
     }
 
@@ -84,10 +93,9 @@ const SignIn = ()=> {
         event.preventDefault()
         signInWithEmailAndPassword(auth, manualSignIn.email, manualSignIn.password)
         .then((userCredentials)=>{
-            const token = userCredentials.user.accessToken;
-            const authenticated = {credToken: token, user: userCredentials.user}
-            localStorage.setItem('currentUser', JSON.stringify(authenticated))
-            setCurrentUser(authenticated)
+            localStorage.setItem('currentUser', JSON.stringify(userCredentials))
+            handleUpdateCurrentUser(userCredentials)
+            navigate('..')
         })
         .catch(error=>{
             const errorCode = error.code;
@@ -152,7 +160,7 @@ const SignIn = ()=> {
                     </form>
                 </section>
                 <section>
-                    <h2>Current User: {currentUser ? currentUser.user.displayName : 'No One'}</h2>
+                    <h2>Current User: {currentUser ? currentUser.displayName : 'No One'}</h2>
                     <button onClick={handleLogout}>Log Out</button>
                 </section>
             </main>

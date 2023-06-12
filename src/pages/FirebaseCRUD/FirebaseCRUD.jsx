@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { useLoaderData, defer, Await } from 'react-router-dom'
-import { getData, addData, updateData, deleteData } from '../../hooks/firebaseConfig'
+import { getData, addData, updateData, deleteData, uploadToStorage } from '../../hooks/firebaseConfig'
 import './FirebaseCRUD.css'
 
 
@@ -11,6 +11,7 @@ const loader = ()=>{
 
 const FirebaseCRUD = ()=> {
     const [data, setData ] = useState({email:'', password:''})
+    const [file, setFile ] = useState({})
     const dataPromise = useLoaderData()
 
     function handleSubmit(event){
@@ -26,6 +27,10 @@ const FirebaseCRUD = ()=> {
         setData(prevState => {
             return {...prevState, [name]: value}
         })
+    }
+
+    function handleFileSubmit(){
+        uploadToStorage(file.name, file)
     }
 
     return(
@@ -81,7 +86,16 @@ const FirebaseCRUD = ()=> {
             <section>
                 <button onClick={(event)=> updateData('QKIniq5KVO8pEXkocldS',{email:data.email, password:data.password})}>Update data</button>
                 <br />
+                <br />
             </section>
+            <section>
+                <form onSubmit={handleFileSubmit}></form>
+                <input name='file' type="file" onChange={(event)=> setFile(event.target.files[0])} />
+                <br />
+                <br />
+                <input type="submit" value={'Submit File'} onClick={handleFileSubmit} />
+            </section>
+
         </>
     )
 }

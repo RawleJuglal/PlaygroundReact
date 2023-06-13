@@ -63,7 +63,6 @@ const deleteData = (collectionID)=>{
 
 /*CRUD for AUTH */
 const updateUserDetails = (userObj)=> {
-  console.log('in updateUserDetails')
   const auth = getAuth()
   updateProfile(auth.currentUser, userObj)
   .then(()=>{
@@ -142,7 +141,6 @@ const uploadToStorage = (name, file)=>{
 }
 
 const uploadProfilePhoto = (name, file, cb)=>{
-  console.log('in uploadProfilePhoto')
   const profileRef = ref(storage, `images/${name}`)
   const uploadTask = uploadBytesResumable(profileRef, file)
   uploadTask.on('state_changed', (snapshot)=>{
@@ -178,7 +176,6 @@ const uploadProfilePhoto = (name, file, cb)=>{
     // Handle successful uploads on complete
     // For instance, get the download URL: https://firebasestorage.googleapis.com/...
     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-      console.log('getting the downloadURL')
       const auth = getAuth();
       updateProfile(auth.currentUser, {
         photoURL: downloadURL

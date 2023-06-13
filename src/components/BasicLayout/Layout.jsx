@@ -7,6 +7,7 @@ const Layout = ()=> {
     const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('currentUser')))
 
     function updateCurrentUser(userObj){
+        console.log(`calling updateCurrentUser: ${userObj}`)
         setCurrentUser(()=>({...userObj}))
     }
     return(

@@ -10,27 +10,20 @@ const Profile = ()=>{
     const navigate = useNavigate()
     const [profileData, setProfileData] = useState(currentUser.user)
     const [photo, setPhoto] = useState({})
-    console.log(currentUser)
-    useEffect(()=>{
-        setProfileData(()=>{
-            // console.log(currentUser.user)
-            return currentUser.user
-        })
-    }, [currentUser])
 
     function handleSubmit(event){
-        console.log('in submit')
         event.preventDefault()  
         updateLocalStorageUserInfo()
         updateUserDetails(profileData)
         uploadProfilePhoto(photo.name, photo, (myData)=>{
             localStorage.setItem('currentUser', JSON.stringify(myData))
+            handleUpdateCurrentUser(JSON.parse(localStorage.getItem('currentUser')))
+            setProfileData(myData.user)
         })
-        handleUpdateCurrentUser(JSON.parse(localStorage.getItem('currentUser')))
+        
     }  
 
     function updateLocalStorageUserInfo(){
-        console.log('in updateLocalStorageUserInfo')
         let myData = JSON.parse(localStorage.getItem('currentUser'))
         let myUser = myData.user;
         const newUserObj = {...myUser, ...profileData}
@@ -74,11 +67,11 @@ const Profile = ()=>{
     return(
         <>
             <h1>Profile page</h1>
-            {currentUser.user.displayName ? 
-                (<h1>Welcome, {currentUser.user.displayName}</h1>) : 
+            {profileData.displayName ? 
+                (<h1>Welcome, {profileData.displayName}</h1>) : 
                 (<h1>Welcome, User</h1>)}
-            {currentUser.user.photoURL ? 
-                (<img src={currentUser.user.photoURL}/>) : 
+            {profileData.photoURL ? 
+                (<img src={profileData.photoURL}/>) : 
                 (<h1>No image provided</h1>)}
             <section>
                 <form onSubmit={handleSubmit}>

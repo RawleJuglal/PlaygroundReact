@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAuth, signOut} from '@firebase/auth'
 import { resetPassword, removeUser, updateUserDetails, uploadProfilePhoto } from '../../hooks/firebaseConfig'
@@ -10,6 +10,13 @@ const Profile = ()=>{
     const navigate = useNavigate()
     const [profileData, setProfileData] = useState(currentUser.user)
     const [photo, setPhoto] = useState({})
+    console.log(currentUser)
+    useEffect(()=>{
+        setProfileData(()=>{
+            // console.log(currentUser.user)
+            return currentUser.user
+        })
+    }, [currentUser])
 
     function handleSubmit(event){
         console.log('in submit')
@@ -20,7 +27,6 @@ const Profile = ()=>{
             localStorage.setItem('currentUser', JSON.stringify(myData))
         })
         handleUpdateCurrentUser(JSON.parse(localStorage.getItem('currentUser')))
-        navigate(0)
     }  
 
     function updateLocalStorageUserInfo(){

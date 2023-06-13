@@ -63,6 +63,7 @@ const deleteData = (collectionID)=>{
 
 /*CRUD for AUTH */
 const updateUserDetails = (userObj)=> {
+  console.log('in updateUserDetails')
   const auth = getAuth()
   updateProfile(auth.currentUser, userObj)
   .then(()=>{
@@ -140,10 +141,12 @@ const uploadToStorage = (name, file)=>{
 
 }
 
-const uploadProfilePhoto = (name, file)=>{
+const uploadProfilePhoto = (name, file, cb)=>{
+  console.log('in uploadProfilePhoto')
   const profileRef = ref(storage, `images/${name}`)
   const uploadTask = uploadBytesResumable(profileRef, file)
   uploadTask.on('state_changed', (snapshot)=>{
+    console.log('starting the upload task')
     const progress = (snapshot.bytesTransferred/ snapshot.totalBytes) * 100;
     console.log(`Upload is ${progress}% done`);
     switch (snapshot.state) {
@@ -175,18 +178,20 @@ const uploadProfilePhoto = (name, file)=>{
     // Handle successful uploads on complete
     // For instance, get the download URL: https://firebasestorage.googleapis.com/...
     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+      console.log('getting the downloadURL')
       const auth = getAuth();
       updateProfile(auth.currentUser, {
         photoURL: downloadURL
       }).then(() => {
         let myData = JSON.parse(localStorage.getItem('currentUser'))
         myData.user.photoURL = downloadURL
-        localStorage.setItem('currentUser', JSON.stringify(myData))
+        cb(myData)
       }).catch((error) => {
         throw new Error(error)
       });
     });
   })
+  return 'uploaded file';
 }
 
 export {

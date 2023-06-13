@@ -12,15 +12,19 @@ const Profile = ()=>{
     const [photo, setPhoto] = useState({})
 
     function handleSubmit(event){
+        console.log('in submit')
         event.preventDefault()  
         updateLocalStorageUserInfo()
         updateUserDetails(profileData)
-        uploadProfilePhoto(photo.name, photo)
+        uploadProfilePhoto(photo.name, photo, (myData)=>{
+            localStorage.setItem('currentUser', JSON.stringify(myData))
+        })
         handleUpdateCurrentUser(JSON.parse(localStorage.getItem('currentUser')))
-        navigate('..')
+        navigate(0)
     }  
 
     function updateLocalStorageUserInfo(){
+        console.log('in updateLocalStorageUserInfo')
         let myData = JSON.parse(localStorage.getItem('currentUser'))
         let myUser = myData.user;
         const newUserObj = {...myUser, ...profileData}

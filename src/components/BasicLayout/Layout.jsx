@@ -7,9 +7,14 @@ const Layout = ()=> {
     const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('currentUser')))
 
     function updateCurrentUser(userObj){
-        console.log(`calling updateCurrentUser: ${userObj}`)
-        setCurrentUser(()=>({...userObj}))
+        if(userObj === null){
+            setCurrentUser(null)
+        } else {
+            console.log(`calling updateCurrentUser: ${userObj}`)
+            setCurrentUser(()=>({...userObj}))
+        }
     }
+
     return(
         <>
             <TopLevelNavbar currentUser={currentUser} handleUpdateCurrentUser={updateCurrentUser} />

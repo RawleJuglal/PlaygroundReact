@@ -17,7 +17,7 @@ const TopLevelNavbar = (props)=> {
         signOut(auth)
         .then(()=>{
             localStorage.removeItem('currentUser')
-            props.handleUpdateCurrentUser({})
+            props.handleUpdateCurrentUser(null)
             navigate('..')
         })
     }

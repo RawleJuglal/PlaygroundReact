@@ -11,7 +11,6 @@ const TopLevelNavbar = (props)=> {
     const currentUser = props.currentUser
     const auth = getAuth()
     const navigate = useNavigate()
-    console.log(currentUser)
 
     const handleLogout = ()=>{
         signOut(auth)
@@ -31,6 +30,7 @@ const TopLevelNavbar = (props)=> {
                     <Navbar.Collapse>
                         <Nav>
                             <Nav.Link href='about'>About</Nav.Link>
+                            <Nav.Link href='crud'>CRUD</Nav.Link>
                             <Nav.Link href='todo'>Todo</Nav.Link>
                             {currentUser ? 
                                 (<NavDropdown title='Profile' id='basic-nav-dropdown'>

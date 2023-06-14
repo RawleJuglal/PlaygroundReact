@@ -1,12 +1,13 @@
-import React, {useState, useEffect} from 'react'
-import { useLoaderData, defer, Await } from 'react-router-dom'
-import { getData, addData, updateData, deleteData, uploadToStorage } from '../../hooks/firebaseConfig'
+import React, {useState} from 'react'
+import { useLoaderData, defer, Await} from 'react-router-dom'
+import { getData, addData, updateData, deleteData, uploadToStorage, collectionRef } from '../../hooks/firebaseConfig'
+
 import './FirebaseCRUD.css'
 
 
 
 const loader = ()=>{
-    return defer({tasks: getData()})
+    return defer({tasks: getData(collectionRef)})
 }
 
 const FirebaseCRUD = ()=> {
@@ -14,38 +15,45 @@ const FirebaseCRUD = ()=> {
     const [file, setFile ] = useState({})
     const dataPromise = useLoaderData()
 
+
     function handleSubmit(event){
         event.preventDefault()
-        addData({email:data.email, password:data.password})
+        addData(collectionRef, {email:data.email, password:data.password})
     }  
 
     function handleChange(event){
+        console.log('handle change called')
         const target = event.target;
+        console.log(target.value)
         const value = target.type === 'checkbox' ? target.checked : target.value;
+        console.log(target.name)
         const name = target.name;
 
         setData(prevState => {
             return {...prevState, [name]: value}
-        })
+        })      
     }
 
     function handleFileSubmit(){
         uploadToStorage(file.name, file)
     }
 
+    
     return(
         <>
             <h1>Create a document in firebase</h1>
             <br />
             <form onSubmit={handleSubmit}>
                 <input 
+                    id='d-data-email'
                     placeholder='email'
                     name="email"
                     value={data.email}
                     type="email" 
                     onChange={handleChange} 
                 />
-                <input 
+                <input
+                    id='d-data-password' 
                     placeholder='password'
                     name="password"
                     value={data.password}
@@ -94,8 +102,9 @@ const FirebaseCRUD = ()=> {
                 <br />
                 <br />
                 <input type="submit" value={'Submit File'} onClick={handleFileSubmit} />
+                <br/>
+                <br/>
             </section>
-
         </>
     )
 }

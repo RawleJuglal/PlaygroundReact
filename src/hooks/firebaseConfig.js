@@ -17,11 +17,12 @@ const app = initializeApp(firebaseConfig);
 const database = getFirestore(app)
 const storage = getStorage(app)
 const collectionRef = collection(database, 'users')
+const todoCollectionRef = collection(database, 'todoList')
 
 
 /* CRUD for firestore */
-const getData = async ()=>{
-  const querySnapshot = await getDocs(collectionRef)
+const getData = async (ref)=>{
+  const querySnapshot = await getDocs(ref)
   const dataArr = querySnapshot.docs.map(doc => ({
     ...doc.data(),
     id:doc.id
@@ -29,8 +30,8 @@ const getData = async ()=>{
   return dataArr
 }
 
-const addData = (dataObj)=>{
-  addDoc(collectionRef, dataObj)
+const addData = (ref, dataObj)=>{
+  addDoc(ref, dataObj)
 .then(()=>{
     alert('data added')
 })
@@ -87,7 +88,6 @@ const removeUser = ()=>{
 }
 
 const resetPassword = (email)=>{
-  console.log(email)
   const auth = getAuth()
   sendPasswordResetEmail(auth, email)
   .then(()=>{
@@ -144,7 +144,6 @@ const uploadProfilePhoto = (name, file, cb)=>{
   const profileRef = ref(storage, `images/${name}`)
   const uploadTask = uploadBytesResumable(profileRef, file)
   uploadTask.on('state_changed', (snapshot)=>{
-    console.log('starting the upload task')
     const progress = (snapshot.bytesTransferred/ snapshot.totalBytes) * 100;
     console.log(`Upload is ${progress}% done`);
     switch (snapshot.state) {
@@ -195,7 +194,8 @@ export {
   app, 
   database, 
   storage,
-  collectionRef, 
+  collectionRef,
+  todoCollectionRef, 
   getData, 
   addData, 
   updateData, 
@@ -204,5 +204,5 @@ export {
   removeUser,
   updateUserDetails,
   uploadToStorage, 
-  uploadProfilePhoto
+  uploadProfilePhoto,
 }

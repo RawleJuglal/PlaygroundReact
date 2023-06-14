@@ -8,6 +8,7 @@ import About from './pages/BasicAbout/About'
 import SignIn from './pages/SignIn/SignIn'
 import {FirebaseCRUD, loader as firebaseCRUDLoader} from './pages/FirebaseCRUD/FirebaseCRUD'
 import Profile from './pages/BasicProfile/Profile'
+import { Todo, loader as todoLoader, action as todoAction } from './pages/RealTimeData/Todo/Todo'
 import FirebaseLogin from './pages/FCC/firebaseLogin'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
@@ -21,7 +22,17 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route index element={<Home />}/>
     <Route path='about' element={<About />}/>
     <Route path='signIn' element={<SignIn />}/>
-    <Route path='todo' element={<FirebaseCRUD />} loader={firebaseCRUDLoader}/>
+    <Route 
+      path='crud' 
+      element={<FirebaseCRUD />} 
+      loader={firebaseCRUDLoader}
+    />
+    <Route 
+      path='todo' 
+      element={<Todo />}
+      loader={todoLoader}
+      action={todoAction}  
+    />
     <Route path='editProfile' element={<Profile />}/>
   </Route>
 ))

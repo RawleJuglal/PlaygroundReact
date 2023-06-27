@@ -3,6 +3,7 @@ import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { getAuth, GoogleAuthProvider, GithubAuthProvider, TwitterAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut} from '@firebase/auth'
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Google, Twitter, Github, Facebook } from 'react-bootstrap-icons';
+import { Button } from '../../components/Button/Button';
 
 const SignIn = ()=> {
     const auth = getAuth()
@@ -161,6 +162,9 @@ const SignIn = ()=> {
                 </section>
                 <section>
                     <h2>Current User: {currentUser ? currentUser.displayName : 'No One'}</h2>
+                    <Button size='sm' onClick={handleLogout}>
+                        Sign Out
+                    </Button>
                     <button onClick={handleLogout}>Log Out</button>
                 </section>
             </main>

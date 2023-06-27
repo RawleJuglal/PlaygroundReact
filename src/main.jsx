@@ -6,6 +6,7 @@ import Layout from './components/BasicLayout/Layout'
 import Home from './pages/BasicHome/Home'
 import About from './pages/BasicAbout/About'
 import SignIn from './pages/SignIn/SignIn'
+import { BasicMenu } from './pages/BasicMenu/BasicMenu'
 import {FirebaseCRUD, loader as firebaseCRUDLoader} from './pages/FirebaseCRUD/FirebaseCRUD'
 import Profile from './pages/BasicProfile/Profile'
 import { Todo, loader as todoLoader, action as todoAction } from './pages/RealTimeData/Todo/Todo'
@@ -34,6 +35,7 @@ const router = createBrowserRouter(createRoutesFromElements(
       action={todoAction}  
     />
     <Route path='editProfile' element={<Profile />}/>
+    <Route path='menu' element={<BasicMenu />} />
   </Route>
 ))
 

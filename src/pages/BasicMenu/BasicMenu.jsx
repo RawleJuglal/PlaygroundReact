@@ -1,23 +1,15 @@
 import React from 'react'
-import { Menu } from '../../components/Menu/Menu'
-import { Button } from '../../components/Button/Button'
-import { MenuDropDown } from '../../components/Menu/MenuDropdown'
-import { MenuItem } from '../../components/Menu/MenuItem'
+import Menu from '../../components/Menu/index'
 import './BasicMenu.css'
+import { Star } from '../../components/Liked/Star'
+
 
 const BasicMenu = ()=>{
-    const sports = ['Tennis', 'Racquetball', 'Pickleball', 'Squash']
+    
     return(
         <>
-            <Menu>
-                <Button>Sports</Button>
-                <MenuDropDown>
-                    {sports.map(sport => (
-                        <MenuItem key={sport}>{sport}</MenuItem>
-                    ))}
-                    
-                </MenuDropDown>
-            </Menu>
+            <Star onChange={()=>console.log('Star was clicked')} /> 
+            <Menu onOpen={()=>console.log('Menu was clicked')}/>    
         </>
     )
 }

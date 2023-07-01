@@ -1,26 +1,24 @@
 import React, {useState} from 'react'
-import { Button } from '../../components/Button/Button'
-import { MenuDropDown } from './MenuDropdown'
+import Toggler from '../Toggler/index'
 
-
-const Menu = ({children})=>{
-    const [open, setOpen] = React.useState(true)
-
-    function toggle() {
-        setOpen(prevOpen => !prevOpen)
-    }
+const Menu = ({children, onOpen})=>{
+    const sports = ['Tennis', 'Racquetball', 'Pickleball', 'Squash']
     
     return(
-        <>
-           <div className='menu'>
-                {React.Children.map(children, (child)=>{
-                    return React.cloneElement(child, {
-                        open,
-                        toggle
-                    })
-                })}
-           </div>
-        </>
+        <Toggler onToggle={onOpen}>
+            <div className='menu'>
+            <Toggler.Button>
+                    Sports
+                </Toggler.Button>
+                <Toggler.On>
+                    <Menu.Dropdown>
+                    {sports.map(sport => (
+                        <Menu.Item key={sport}>{sport}</Menu.Item>
+                    ))}     
+                    </Menu.Dropdown>
+                </Toggler.On>
+            </div>
+        </Toggler>
     )
 }
 

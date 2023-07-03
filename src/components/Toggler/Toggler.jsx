@@ -4,9 +4,15 @@ const TogglerContext = React.createContext()
 
 const Toggler = ({children, onToggle})=>{
     const [on , setOn] = React.useState(false)
+    const firstRender = React.useRef(true)
 
     React.useEffect(()=>{
-        onToggle()
+        if(firstRender.current){
+            firstRender.current = false
+        } else {
+            onToggle()
+        }
+        
     }, [on])
 
     const toggle = ()=>{

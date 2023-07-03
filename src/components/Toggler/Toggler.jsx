@@ -2,7 +2,9 @@ import React from 'react'
 
 const TogglerContext = React.createContext()
 
-const Toggler = ({children, onToggle})=>{
+// This onToggle prop is saying it equals a NOOPs function if nothing
+// is passed to the onToggle prop
+const Toggler = ({children, onToggle = ()=>{}})=>{
     const [on , setOn] = React.useState(false)
     const firstRender = React.useRef(true)
 

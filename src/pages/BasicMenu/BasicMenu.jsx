@@ -8,7 +8,10 @@ const BasicMenu = ()=>{
     
     return(
         <>
-            <Star onChange={()=>console.log('Star was clicked')} /> 
+            {/* We dont have to pass a function for the Toggler inside because 
+            we've stated in the toggler if nothing provided here then onToggle
+            function will be an empty function NOOPs */}
+            <Star /> 
             <Menu onOpen={()=>console.log('Menu was clicked')}/>    
         </>
     )
